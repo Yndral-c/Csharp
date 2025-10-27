@@ -13,3 +13,4 @@ C:\Users\Landry\RiderProjects\ConsoleApp1\ConsoleApp1\obj\Debug\net9.0\ConsoleAp
 C:\Users\Landry\RiderProjects\ConsoleApp1\ConsoleApp1\obj\Debug\net9.0\ConsoleApp1.genruntimeconfig.cache
 C:\Users\Landry\RiderProjects\ConsoleApp1\ConsoleApp1\obj\Debug\net9.0\ref\ConsoleApp1.dll
 C:\Users\Landry\RiderProjects\ConsoleApp1\ConsoleApp1\bin\Debug\net9.0\Data\CoursSupDeVinci_C#.csv
+C:\Users\Landry\RiderProjects\ConsoleApp1\ConsoleApp1\obj\Debug\net9.0\ConsoleApp1.sourcelink.json

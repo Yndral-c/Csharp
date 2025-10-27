@@ -6,13 +6,14 @@ class Program {
     static void Main()
     {
 
-        var data = new StreamReader("Data/CoursSupDeVinci_C#.csv");
-        data.ReadLine();
-
         Dictionary<int, Person> profiles = new Dictionary<int, Person>();
 
         #region Lecture du fichier CSV
         // Lecture du fichier CSV
+        var data = new StreamReader("Data/CoursSupDeVinci_C#.csv");
+        data.ReadLine();
+        
+        
         string line;
         while ((line = data.ReadLine()) != null)
         {
@@ -20,8 +21,8 @@ class Program {
             
             Person person = new Person();
             
-            person.Firstname = values[1];
-            person.Lastname = values[2];
+            person.Lastname = values[1];
+            person.Firstname = values[2];
             person.Birthdate = DateTime.Parse(values[3]);
             var details = values[4].Split(';');
             person.AdressDetails = new Detail(details[0], int.Parse(details[1].Trim()), details[2]);
@@ -30,8 +31,6 @@ class Program {
             profiles.Add(int.Parse(values[0]), person);
         }
         #endregion
-
-        Console.WriteLine();
 
         #region Exercice 3
         
@@ -60,16 +59,19 @@ class Program {
         #endregion
         
         #region Exercice 4
-        // On reprend la list tallerPerson qui a été fait dans Exercice 3
+        // Création d'une classe 
+        
+        Classe classeB2 = new Classe(profiles.Values.ToList(), "Classe de B2", "Sup de Vinci", "B2");
+        
         // On la tri dans l'ordre des personnes les plus grandes et on sélectionne uniquement celle qui sont de Nantes
-        List<Person> tallerPersonNantes = tallerPerson.OrderByDescending(p => p.Taille).ToList().Where(p => p.AdressDetails.City == "Nantes").ToList();
+        List<Person> tallerPersonNantes = classeB2.Eleves.Where(p => p.Taille > moyenne && p.AdressDetails.City == "Nantes").OrderByDescending(p => p.Taille).ToList();
        
         // On affiche le résultat
         for (int i=0; i<= tallerPersonNantes.Count-1; i++)
         {
             double taille = tallerPersonNantes[i].Taille / 100.00;
             
-            Console.WriteLine($"{i+1} - {tallerPersonNantes[i].Lastname} - {taille:F2}");
+            Console.WriteLine($"{i+1} - {tallerPersonNantes[i].Firstname} - {taille:F2}");
         }
         
         #endregion
