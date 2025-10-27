@@ -5,7 +5,7 @@ using ConsoleApp1;
 class Program {
     static void Main()
     {
-
+        // Déclaration de variable
         Dictionary<int, Person> profiles = new Dictionary<int, Person>();
 
         #region Lecture du fichier CSV
@@ -34,6 +34,7 @@ class Program {
 
         #region Exercice 3
         
+        // Calcule de la taille moyenne
         double moyenne = (int)profiles.Values.Average(p => p.Taille);
         double moyenneMaitre = Math.Floor(moyenne) / 100;
 
@@ -49,9 +50,12 @@ class Program {
         #endregion
 
         #region Exercice 3.5 
-        // string nomClasse = Console.ReadLine("Quel est le nom de la classe");
-        // string ecole = Console.ReadLine("Quel est le nom de l'école");
-        // string niveau = Console.ReadLine("Quel est le niveau de la classe");
+        // Console.WriteLine("Quel est le nom de la classe")
+        // string nomClasse = Console.ReadLine();
+        // Console.WriteLine("Quel est le nom de l'école")
+        // string ecole = Console.ReadLine();
+        // Console.WriteLine("Quel est le niveau de la classe")
+        // string niveau = Console.ReadLine();
         
         // Classe classeB2 = new Classe(profiles.Values.ToList(), nomClasse, ecole, niveau);
         // Console.WriteLine(classeB2.Eleves[0].Firstname);
@@ -63,7 +67,7 @@ class Program {
         
         Classe classeB2 = new Classe(profiles.Values.ToList(), "Classe de B2", "Sup de Vinci", "B2");
         
-        // On la tri dans l'ordre des personnes les plus grandes et on sélectionne uniquement celle qui sont de Nantes
+        // On la tri les élèves tailles décroissante et on sélectionne uniquement ceux et ceux qui sont au dessus de la taille moyenne de la classequi sont de Nantes
         List<Person> tallerPersonNantes = classeB2.Eleves.Where(p => p.Taille > moyenne && p.AdressDetails.City == "Nantes").OrderByDescending(p => p.Taille).ToList();
        
         // On affiche le résultat
