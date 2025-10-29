@@ -7,14 +7,6 @@ public class Classe
     private string ecole;
     private string niveau;
 
-    public Classe(List<Person> eleves, string nomClasse, string ecole, string niveau)
-    {
-        this.eleves = eleves;
-        this.nomClasse = nomClasse;
-        this.ecole = ecole;
-        this.niveau = niveau;
-    }
-
     public List<Person> Eleves
     {
         get => eleves;
