@@ -1,7 +1,6 @@
-﻿using ConsoleApp1;
-using Npgsql;
+﻿using Npgsql;
 
-namespace CoursSupDeVinci;
+namespace ConsoleApp1.Data;
 
 public class DbConnection
 {

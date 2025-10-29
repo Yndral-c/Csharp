@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using ConsoleApp1;
-using CoursSupDeVinci;
+using ConsoleApp1.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +20,11 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 var host = Host.CreateDefaultBuilder(args)
+    .ConfigureAppConfiguration(builder =>
+    {
+        builder.Sources.Clear();
+        builder.AddConfiguration(configuration);
+    })
     .ConfigureServices(services =>
     {
         // NpgsqlConnection singleton avec ouverture automatique
@@ -33,42 +38,28 @@ var host = Host.CreateDefaultBuilder(args)
 
         // On enregistre notre service applicatif
         services.AddTransient<DbConnection>();
+        
+        // On enregistre du service SCV
+        services.AddTransient<CSVService>();
     })
     .Build();
 
 using var scope = host.Services.CreateScope();
 DbConnection dbConnectionService = scope.ServiceProvider.GetRequiredService<DbConnection>();
 
+CSVService csvService = scope.ServiceProvider.GetRequiredService<CSVService>();
+
 #endregion
 
 #region Lecture du fichier CSV
-// Lecture du fichier CSV
-String path = configuration.GetRequiredSection("CSVFiles")["CoursSupDeVinci"];
 
-
-var lignes = File.ReadAllLines(path);
-
-for (int i = 1; i < lignes.Length; i++)
-{
-    string line = lignes[i];
-    
-    Person person = new Person();
-    
-    person.Lastname = line.Split(',')[1];
-    person.Firstname = line.Split(',')[2];
-    person.Birthdate = DateTime.Parse(line.Split(',')[3]);
-    var details = line.Split(',')[4].Split(';');
-    person.AdressDetails = new Detail(details[0], int.Parse(details[1].Trim()), details[2]);
-    person.Taille = Int32.Parse(line.Split(',')[5]);
-    
-    profiles.Add(int.Parse(line.Split(',')[0]), person);
-}
+List<Person> persons = csvService.ReadAndMapPersons();
 
 Classe maClasse = new Classe();
 maClasse.Niveau = "B2";
 maClasse.NomClasse = "B2 C#";
 maClasse.Ecole = "SupDeVinci";
-maClasse.Eleves = profiles.Values.ToList();
+maClasse.Eleves = persons.ToList();
 
 await dbConnectionService.init(maClasse);
 #endregion
