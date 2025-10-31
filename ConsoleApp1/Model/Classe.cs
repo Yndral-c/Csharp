@@ -1,6 +1,8 @@
-﻿namespace ConsoleApp1;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class Classe
+namespace ConsoleApp1;
+
+/* public class Classe
 {
     private List<Person> eleves;
     private string nomClasse;
@@ -30,7 +32,42 @@ public class Classe
         get => niveau;
         set => niveau = value ?? throw new ArgumentNullException(nameof(value));
     }
+} */
 
+public class Classe
+{
+    [Key]
+    public Guid Id { get; set; } =  Guid.NewGuid();
+
+    [Required] private string name;
+
+    [Required] private string school;
+
+    [Required] private string level;
+
+    private List<Person> persons;
     
+    public string Name
+    {
+        get => name;
+        set => name = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public string Level
+    {
+        get => level;
+        set => level = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public string School
+    {
+        get => school;
+        set => school = value ?? throw new ArgumentNullException(nameof(value));
+    }
+    public List<Person> Persons
+    {
+        get => persons;
+        set => persons = value ?? throw new ArgumentNullException(nameof(value));
+    }
 
 }

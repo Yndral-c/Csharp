@@ -1,47 +1,29 @@
-﻿    using ConsoleApp1;
+﻿    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using ConsoleApp1;
 
     public class Person
     {
-        private String firstname;
-
-        private String lastname;
+        [Key]
+        public Guid Id { get; set; } =  Guid.NewGuid();
         
-        private DateTime birthdate;
+        [Required]
+        public String firstname { get; set; }
+        [Required]
+        public String lastname { get; set; }
+        [Required]
+        public DateTime birthdate { get; set; }
+    
+        [Required]
+        public ICollection<Detail> AdressDetails { get; set; } = new List<Detail>();
+        [Required]
+        public int taille { get; set; }
         
-        private Detail adressDetails;
-
-        private int taille;
-
-        public int Taille
-        {
-            get => taille;
-            set => taille = value;
-        }
-
-        public Detail AdressDetails
-        {
-            get => adressDetails;
-            set => adressDetails = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        public string Firstname
-        {
-            get => firstname;
-            set => firstname = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        public string Lastname
-        {
-            get => lastname;
-            set => lastname = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        public DateTime Birthdate
-        {
-            get => birthdate;
-            set => birthdate = value;
-        }
-
+        [ForeignKey("person_classe_fk")]
+        public Guid ClasseId { get; set; }
+        public Classe Classe {  get; set; }
+        
+        
         public int getYearsOld()
         {
             DateTime today = DateTime.Today;

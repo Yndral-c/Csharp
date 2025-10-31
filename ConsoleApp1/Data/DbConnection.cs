@@ -1,15 +1,23 @@
 ﻿using Npgsql;
 
-namespace ConsoleApp1.Data;
+namespace ConsoleApp1;
 
 public class DbConnection
 {
-    private readonly NpgsqlConnection _connection;
-    public DbConnection(NpgsqlConnection connection)
+    private readonly AppDbContext _appDbContext;
+    public DbConnection(AppDbContext appDbContext)
     {
-        _connection = connection;
+        _appDbContext = appDbContext;
+    }
+
+    public void SaveFullClasse(Classe maClasse)
+    {
+        _appDbContext.Add(maClasse);
+        _appDbContext.SaveChanges();
     }
     
+    
+    /*
     public async Task init(Classe maClasse)
     {
          // Commence une transaction pour tout insérer ensemble
@@ -61,4 +69,5 @@ public class DbConnection
         Console.WriteLine("Insertion hiérarchique réussie");
     }
 
+*/
 }

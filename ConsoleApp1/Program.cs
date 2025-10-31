@@ -1,17 +1,88 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using ConsoleApp1;
-using ConsoleApp1.Data;
+using ConsoleApp1.InterfaceRepository;
+using ConsoleApp1.Utils;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Npgsql;
+
+#region ORM
+
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile(@"C:\\Users\\Landry\\RiderProjects\\ConsoleApp1\\appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
+
+var host = Host.CreateDefaultBuilder(args)
+    .ConfigureServices(services =>
+    {
+        // On enregistre le DbContext EF pour gérer la base
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+        // On enregistre notre service CSV pour lire le fichier et mapper les objets
+        services.AddTransient<DbConnection>();
+
+        services.AddTransient<IPersonRepository, PersonRepository>();
+    })
+    .Build();
+
+// Crée une portée pour récupérer les services
+using var scope = host.Services.CreateScope();
+IPersonRepository personRepository = scope.ServiceProvider.GetRequiredService<IPersonRepository>();
+
+String path = configuration.GetRequiredSection("CSVFiles")["CoursSupDeVinci"];
+List<Person> persons = new List<Person>();
+
+var lignes = File.ReadAllLines(path);
+
+for (int i = 1; i < lignes.Length; i++) // On commence à 1 pour sauter l'en-tête
+{
+    string line = lignes[i];
+    string[] values = line.Split(',');
+
+    Person person = new Person
+    {
+        lastname = values[1],
+        firstname = values[2],
+        birthdate = DateTimeUtils.ConvertToDateTime(values[3]),
+        taille = Int32.Parse(values[5])
+    };
+    
+    List<String> details = line.Split(',')[4].Split(';').ToList();
+    
+    person.AdressDetails.Add(new Detail(details[0], int.Parse(details[1]), details[2]));
+    persons.Add(person);
+}
+
+Classe maClasse = new Classe();
+maClasse.Level = "B2";
+maClasse.Name = "B2 C#";
+maClasse.School = "SupDeVinci";
+maClasse.Persons = persons.ToList();
 
 
+DbConnection dbConnectionService = scope.ServiceProvider.GetRequiredService<DbConnection>();
+// dbConnectionService.SaveFullClasse(maClasse);
+List<Person> personsDb = personRepository.GetAllEthan();
+
+foreach (var person in personsDb)
+{
+    Console.WriteLine("Il y a " + personsDb.Count + " personnes qui s'appelles "+person.firstname + " et habite à "
+                      + person.AdressDetails.First().City);
+}
+
+
+#endregion
+
+#region dbConnection
 // Déclaration de variable
+/*
 Dictionary<int, Person> profiles = new Dictionary<int, Person>();
-
 #region lancement services
+
+// Récupération du service CSV
 
 // Charger la configuration manuellement
 var configuration = new ConfigurationBuilder()
@@ -40,14 +111,14 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddTransient<DbConnection>();
         
         // On enregistre du service SCV
-        services.AddTransient<CSVService>();
+        services.AddTransient<IServiceCSV, CSVService>();
     })
     .Build();
 
 using var scope = host.Services.CreateScope();
 DbConnection dbConnectionService = scope.ServiceProvider.GetRequiredService<DbConnection>();
 
-CSVService csvService = scope.ServiceProvider.GetRequiredService<CSVService>();
+IServiceCSV csvService = scope.ServiceProvider.GetRequiredService<IServiceCSV>();
 
 #endregion
 
@@ -62,6 +133,8 @@ maClasse.Ecole = "SupDeVinci";
 maClasse.Eleves = persons.ToList();
 
 await dbConnectionService.init(maClasse);
+#endregion
+*/
 #endregion
 
 #region Exercice 3

@@ -1,10 +1,16 @@
-﻿using ConsoleApp1.Utils;
+﻿/*
+ using ConsoleApp1.Utils;
 using Microsoft.Extensions.Configuration;
 
 namespace ConsoleApp1
 {
+    public interface IServiceCSV
+    {
+        List<Person> ReadAndMapPersons();
+    }
+    
     // C'est la classe qui gère toute la logique CSV
-    public class CSVService
+    public class CSVService : IServiceCSV
     {
         private readonly string _path;
 
@@ -30,10 +36,10 @@ namespace ConsoleApp1
 
                 Person person = new Person
                 {
-                    Lastname = values[1],
-                    Firstname = values[2],
-                    Birthdate = DateTimeUtils.ConvertToDateTime(values[3]),
-                    Taille = Int32.Parse(values[5])
+                    lastname = values[1],
+                    firstname = values[2],
+                    birthdate = DateTimeUtils.ConvertToDateTime(values[3]),
+                    taille = Int32.Parse(values[5])
                 };
                 
                 // Gérer les détails de l'adresse
@@ -47,3 +53,4 @@ namespace ConsoleApp1
         }
     }
 }
+*/
